@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import NRow.Board;
 import NRow.Heuristics.Heuristic;
+import NRow.Node;
 
 /**
  * Example player implementation controlled by a human (through System.in)
@@ -20,6 +21,7 @@ public class HumanPlayer extends PlayerController {
   public HumanPlayer(int playerId, int gameN, Heuristic heuristic) {
     super(playerId, gameN, heuristic);
   }
+
 
   /**
    * Show the human player the current board and ask them for their next move

@@ -3,9 +3,6 @@ package NRow;
 
 import java.util.ArrayList;
 
-import NRow.Game.*;
-import NRow.Players.PlayerController;
-
 
 public class Node {
 
@@ -42,6 +39,29 @@ public class Node {
 //        return new Board(board.getBoardState());
 //    }
 
+    public static boolean isTerminal(Node node){
+        return node.children == null;
+    }
+
+    public static ArrayList<Node> getChildren(Node node){
+        //TODO evaluate next board state?
+
+        return node.children;
+    }
+
+    public static void addChildren(ArrayList<Node> descendants, Node node){
+        node.children = descendants;
+    }
+
+
+
+
+
+
+
+
+
+
     public static Node make_tree(Board board1, Game game, int depth) { // we may neeed th array with players fot the playerID
         System.out.println("Q: " + Q);
         Q++;
@@ -77,26 +97,8 @@ public class Node {
     }
 
 
-         /*
-        if (terminal => board==winning, board == tie){
-            stop this branch.
-            return node;
-        } else {
-            recurse;
-        }
-         */
-
-        /*
-
-        for first node (empty board) determine children (every possible move)
-           for every move possible ('pretend' play -> get boardState after 'move' AKA children)
-
-        recursively determine children of children and build tree
-            for c in children yield make_tree(c)
-
-         */
-
-
-
+    public static void addChild(Node node, Board newBoard) {
+        node.children.add(new Node(newBoard)); // todo why is this a boolean?
+    }
 }
 

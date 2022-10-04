@@ -2,6 +2,7 @@ package NRow;
 
 import NRow.Heuristics.SimpleHeuristic;
 import NRow.Players.HumanPlayer;
+import NRow.Players.MinMaxPlayer;
 import NRow.Players.PlayerController;
 import NRow.Node.*;
 
@@ -19,10 +20,12 @@ public class App {
         int boardHeight = 6;
         int depth = 0;
 
-        PlayerController[] players = getPlayers(gameN);
+        PlayerController[] players = getMinMaxPlayer(gameN);
 
         Game game = new Game(gameN, boardWidth, boardHeight, players);
-//        Node.make_tree(b, game, depth);
+        game.startGame();
+        //Node.make_tree(b, game, depth);
+
 
 
 
@@ -56,6 +59,18 @@ public class App {
         //TODO: Implement other PlayerControllers (MinMax, AlphaBeta)
 
         PlayerController[] players = { human, human2 };
+
+        return players;
+    }
+
+    private static PlayerController[] getMinMaxPlayer(int n) {
+        SimpleHeuristic heuristic1 = new SimpleHeuristic(n);
+        SimpleHeuristic heuristic2 = new SimpleHeuristic(n);
+
+        PlayerController human = new HumanPlayer(1, n, heuristic1);
+        PlayerController minmax = new MinMaxPlayer(2, n,4,heuristic1);
+
+        PlayerController[] players = { human, minmax };
 
         return players;
     }

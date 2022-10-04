@@ -131,4 +131,8 @@ public class Board {
     
     return output;
   }
+  public boolean isTerminal(){
+    //TODO
+    return false;
+  }
 }
