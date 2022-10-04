@@ -4,11 +4,6 @@ import NRow.Board;
 import NRow.Heuristics.Heuristic;
 import NRow.Node;
 
-import java.util.ArrayList;
-import java.util.Formattable;
-
-import static NRow.Node.getChildren;
-import static NRow.Node.isTerminal;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -64,7 +59,7 @@ public class MinMaxPlayer extends PlayerController {
         Node node = new Node(board);
         int depth = 6; // looks 6 moves ahead
         // need to figure out exactly what maxmove returns
-        int val = abPruning(depth, board, true); // this is where i select the player for now
+        int val = minmax2(depth, board, true)[0]; // this is where i select the player for now
         System.out.println("best " + val);
 
         return val;
@@ -117,51 +112,52 @@ public class MinMaxPlayer extends PlayerController {
      * @param maxPlayer
      * @return
      */
-    public int minmax2(int depth, Board board, boolean maxPlayer) {
+    public int[] minmax2(int depth, Board board, boolean maxPlayer) {
 
         Node tree = new Node(board); //this is our database
 
 
-        int maxMove = 0;
+        int bestMovee = 0;
         int value = 0;
 
         if (depth == 0 || board.isTerminal()) {
             //return heuristic.evaluateBoard(playerId, board);
-            return heuristic.getBestAction(playerId, board);
+            return new int[]{heuristic.getBestAction(playerId, board), 0};
         }
 
         if (maxPlayer) {
             int maxValue = -10000;
-            value = maxValue;
+            //value = maxValue;
 
             for (int i = 0; i < board.width; i++) { //for each of the possible moves
                 if (board.isValid(i)) { //if the move is valid
                     Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
                     Node.addChild(tree, newBoard);
 
-                    value = max(value, minmax2(depth - 1, board, true));
+                    value = minmax2(depth - 1, board, true)[1];
                     if (value > maxValue) {
-                        maxMove = i;
+                        bestMovee = i; //TODO THIs stays the sameeeeeeeee
                     }
 
                 }
             }
-            return maxMove;
+            return new int[] {bestMovee,value};
 
         } else {
             int minValue = 100000;
-            value = minValue;
+            //value = minValue; //todo
 
             for (int i = 0; i < board.width; i++) { //for each of the possible moves
                 if (board.isValid(i)) { //if the move is valid
                     Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
-                    value = min(value, minmax2(depth - 1, board, false));
+                    value = min(value, minmax2(depth - 1, board, false)[1]);
+
                     if (value < minValue) {
-                        maxMove = i;
+                        bestMovee = i;
                     }
                 }
             }
-            return maxMove;
+            return new int[] {bestMovee,value};
         }
 
 
