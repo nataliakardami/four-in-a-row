@@ -2,8 +2,6 @@ package NRow.Heuristics;
 
 import NRow.Board;
 
-import java.util.HashSet;
-
 /**
  * Abstract class defining Heuristic
  */
@@ -90,6 +88,4 @@ public abstract class Heuristic {
      * @return heuristic value for the board state
      */
     protected abstract int evaluate(int player, Board board);
-
-//    protected abstract HashSet<BoardState> make_tree();
 }

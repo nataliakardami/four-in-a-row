@@ -3,8 +3,6 @@ package NRow.Heuristics;
 import NRow.Board;
 import NRow.Game;
 
-import java.util.HashSet;
-
 public class SimpleHeuristic extends Heuristic {
 
     public SimpleHeuristic(int gameN) {
@@ -23,9 +21,9 @@ public class SimpleHeuristic extends Heuristic {
     protected int evaluate(int player, Board board) {
         int[][] boardState = board.getBoardState();
         int winning = Game.winning(boardState, this.gameN);
-        if (winning == player) {
+        if(winning == player) {
             return Integer.MAX_VALUE;
-        } else if (winning != 0) {
+        } else if(winning != 0) {
             return Integer.MIN_VALUE;
         }
 
@@ -71,60 +69,5 @@ public class SimpleHeuristic extends Heuristic {
 
         return maxInRow;
     }
-
-//    @Override
-//    protected HashSet make_tree() {
-//        parent = parent_node
-//        depth = 0
-//        while depth < 10 {
-//            children[] = make_children(parent)
-//            for i in range 7:
-//            tree[depth][i] = make_children(children[i])
-//            depth ++
-//        }
-//
-//        // return
-//        return null;
-//
-//    }
-
-
-
-    //TODO
-    // def Board make_children(current state) {
-    //      7 columns
-    //  return 7 children nodes
-    // }
-
-    // TODO
-    //  def Board array state_trees(parent_node) {
-    //      tree[0][0] = parent node LINKED LIST
-    //      parent = parent_node
-    //
-    //      for i in range limit
-    //         for j in range 7 ?
-    //              tree[i][j] = make_children(parent)[j]
-    //              parent = tree[i][j] # first iteration 7 children which become next parent
-    /*
-
-
-     Tree{
-     parent = parent_node
-     depth = 0
-     while depth < 10 {
-         children[] = make_children(parent)
-            for i in range 7:
-               tree[depth][i] = make_children(children[i])
-            depth ++
-          }
-
-
-          return tree
-     }
-
-     *
-     */
-    //
-
 
 }

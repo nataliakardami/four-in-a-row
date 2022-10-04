@@ -3,6 +3,12 @@ package NRow.Players;
 import NRow.Board;
 import NRow.Heuristics.Heuristic;
 
+/*
+https://tutorialedge.net/artificial-intelligence/min-max-algorithm-in-java/
+https://www.e4developer.com/2018/09/23/implementing-minimax-algorithm-in-java/
+https://medium.com/analytics-vidhya/artificial-intelligence-at-play-connect-four-minimax-algorithm-explained-3b5fc32e4a4f
+ */
+
 public class MinMaxPlayer extends PlayerController {
     private int depth;
 

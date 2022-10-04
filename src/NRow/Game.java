@@ -106,7 +106,7 @@ public class Game {
     
     // Ascending Diagonal Check
     for (int i = 0; i < (board.length - (gameN - 1)); i++) {
-      for (int j = board[i].length - 1; j > gameN - 1; j--) {
+      for (int j = board[i].length - 1; j > gameN; j--) {
         if (board[i][j] != 0) {
           player = board[i][j];
           for (int x = 1; x < gameN; x++) {

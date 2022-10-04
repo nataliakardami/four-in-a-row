@@ -3,9 +3,30 @@ package NRow;
 import NRow.Heuristics.SimpleHeuristic;
 import NRow.Players.HumanPlayer;
 import NRow.Players.PlayerController;
+import NRow.Node.*;
+
+import java.util.Arrays;
 
 public class App {
+
     public static void main(String[] args) throws Exception {
+        Board b = new Board(7,6);
+
+//        System.out.println(Arrays.deepToString(b.getBoardState()));
+
+        int gameN = 4;
+        int boardWidth = 7;
+        int boardHeight = 6;
+        int depth = 0;
+
+        PlayerController[] players = getPlayers(gameN);
+
+        Game game = new Game(gameN, boardWidth, boardHeight, players);
+//        Node.make_tree(b, game, depth);
+
+
+
+        /*
         int gameN = 4;
         int boardWidth = 7;
         int boardHeight = 6;
@@ -14,6 +35,10 @@ public class App {
 
         Game game = new Game(gameN, boardWidth, boardHeight, players);
         game.startGame();
+
+         */
+
+
     }
 
     /**

@@ -1,13 +1,13 @@
 package NRow;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class Board {
   public final int width;
   public final int height;
-  private int[][] boardState; // 2D integer array containing 0's, or else playerId's in case a spot has been claimed
+  private int[][] boardState; // 2D integer array containing 0's,
+  // or else playerId's in case a spot has been claimed
+
 
   /**
    * Constructor for creating a new empty board
@@ -131,29 +131,4 @@ public class Board {
     
     return output;
   }
-
-
-  public static HashMap<Board, Integer> make_tree(Board root) {
-    Board parent = root; //tree class? HashMap(Node,Depth)
-    HashMap<Board,Integer> tree = new HashMap<>(); // int = depth
-    int depth = 0;
-
-    while (depth < 10) {
-      Board[] children = make_children(parent); // make_children doesn't exist yet
-
-      for(int i =  0; i < 7; i++) {
-//        tree.add(make_children(children[i]));
-//        tree.
-      }
-
-      depth++;
-    }
-
-    // return tree
-    return null;
-
-  }
-
-
-
 }
