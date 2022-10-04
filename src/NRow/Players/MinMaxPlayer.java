@@ -28,10 +28,11 @@ public class MinMaxPlayer extends PlayerController {
     }
 
     /**
-   * Implement this method yourself!
-   * @param board the current board
-   * @return column integer the player chose
-   */
+     * Implement this method yourself!
+     *
+     * @param board the current board
+     * @return column integer the player chose
+     */
     @Override
     public int makeMove(Board board) {
         // TODO: implement minmax player!
@@ -61,13 +62,15 @@ public class MinMaxPlayer extends PlayerController {
         */
         //my code
         Node node = new Node(board);
-        int depth = 4; // looks 4 moves ahead
-       // need to figure out exactly what maxmove returns
+        int depth = 6; // looks 6 moves ahead
+        // need to figure out exactly what maxmove returns
+        int val = abPruning(depth, board, true); // this is where i select the player for now
+        System.out.println("best " + val);
 
-        return minmax2(depth,board,true);
+        return val;
     }
 
-
+/*
     public int minmax(Node node, int depth, Board board, boolean maxPlayer) {
 
         Node tree = new Node(board); //this is our database
@@ -84,20 +87,19 @@ public class MinMaxPlayer extends PlayerController {
             value = -1000;
 
             ArrayList<Node> children = getChildren(node); //getchildren will evaluate the next possible board states
-            Node.addChildren(children,tree); // TODO i want this to work lke this: tree.add(children) //this is how we store states
+            Node.addChildren(children, tree); // TODO i want this to work lke this: tree.add(children) //this is how we store states
             for (Node child : children) {
 
-                value = max(value, minmax(child, depth-1, board, false));
+                value = max(value, minmax(child, depth - 1, board, false));
 
             }
 
-        }
-        else {
+        } else {
             value = 100000;
             ArrayList<Node> children = getChildren(node);
             // mayb the eval should be here
             for (Node child : children) {
-                value = min(value, minmax(child, depth-1, board, true));
+                value = min(value, minmax(child, depth - 1, board, true));
             }
 
 
@@ -105,11 +107,11 @@ public class MinMaxPlayer extends PlayerController {
         return value;
 
     }
-
+*/
 
     /**
      * Minmax but i evaluate states here
-
+     *
      * @param depth
      * @param board
      * @param maxPlayer
@@ -120,50 +122,117 @@ public class MinMaxPlayer extends PlayerController {
         Node tree = new Node(board); //this is our database
 
 
-
         int maxMove = 0;
         int value = 0;
 
         if (depth == 0 || board.isTerminal()) {
             //return heuristic.evaluateBoard(playerId, board);
-            return  heuristic.getBestAction(playerId, board);
+            return heuristic.getBestAction(playerId, board);
         }
 
         if (maxPlayer) {
             int maxValue = -10000;
             value = maxValue;
 
-            for(int i = 0; i < board.width; i++) { //for each of the possible moves
-                if(board.isValid(i)) { //if the move is valid
+            for (int i = 0; i < board.width; i++) { //for each of the possible moves
+                if (board.isValid(i)) { //if the move is valid
                     Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
-                    Node.addChild(tree,newBoard);
+                    Node.addChild(tree, newBoard);
 
-                    if(value > maxValue) {
+                    value = max(value, minmax2(depth - 1, board, true));
+                    if (value > maxValue) {
                         maxMove = i;
                     }
-                    value = max(value, minmax2(depth-1, board, true));
+
                 }
             }
+            return maxMove;
 
-        }
-        else {
+        } else {
             int minValue = 100000;
-            value=minValue;
+            value = minValue;
 
-            for(int i = 0; i < board.width; i++) { //for each of the possible moves
-                if(board.isValid(i)) { //if the move is valid
+            for (int i = 0; i < board.width; i++) { //for each of the possible moves
+                if (board.isValid(i)) { //if the move is valid
                     Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
-                    value = min(value, minmax2(depth-1, board, false));
-                    if(value < minValue) {
+                    value = min(value, minmax2(depth - 1, board, false));
+                    if (value < minValue) {
                         maxMove = i;
                     }
                 }
             }
-
+            return maxMove;
         }
-        return maxMove;
+
 
     }
+
+    public int abPruning(int depth, Board board, boolean maxPlayer) {
+
+        Node tree = new Node(board); //this is our database
+
+
+        int maxMove = 0;
+        int value = 0;
+        int a = -10000000;
+        int b = 10000000;
+
+        if (depth == 0 || board.isTerminal()) {
+            //return heuristic.evaluateBoard(playerId, board);
+            return heuristic.getBestAction(playerId, board);
+        }
+
+        if (maxPlayer) {
+            int maxValue = -10000;
+            value = maxValue;
+
+            for (int i = 0; i < board.width; i++) { //for each of the possible moves
+                if (board.isValid(i)) { //if the move is valid
+                    Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
+                    Node.addChild(tree, newBoard);
+
+                    value = max(value, abPruning(depth - 1, board, true));
+
+                    if (value > maxValue) {
+                        maxMove = i;
+                    }
+                    a = max(a,value);
+                    if (a >= b){
+                        break;
+                    }
+
+                }
+            }
+            return maxMove;
+
+
+        }
+
+        else {
+            int minValue = 100000;
+            value = minValue;
+
+            for (int i = 0; i < board.width; i++) { //for each of the possible moves
+                if (board.isValid(i)) { //if the move is valid
+                    Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
+
+                    value = min(value, abPruning(depth - 1, board, false));
+
+                    if (value < minValue) {
+                        maxMove = i;
+                    }
+                    b = min(b,value);
+                    if (a >= b){
+                        break;
+                    }
+
+                }
+            }
+            return maxMove;
+        }
+
+    }
+
 
 
     public int getDepth() {
