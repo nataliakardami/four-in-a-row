@@ -1,6 +1,7 @@
 package NRow.Players;
 
 import NRow.Board;
+import NRow.Game;
 import NRow.Heuristics.Heuristic;
 import NRow.Node;
 
@@ -23,49 +24,25 @@ public class MinMaxPlayer extends PlayerController {
     }
 
     /**
-     * Implement this method yourself!
+     * Fetches the best move from the minmax function
      *
      * @param board the current board
      * @return column integer the player chose
      */
     @Override
     public int makeMove(Board board) {
-        // TODO: implement minmax player!
-        // HINT: use the functions on the 'board' object to produce a new board given a specific move
-        // HINT: use the functions on the 'heuristic' object to produce evaluations for the different board states!
 
-        /*
-        // Example: 
-        int maxValue = Integer.MIN_VALUE;
-        int maxMove = 0;
-        for(int i = 0; i < board.width; i++) { //for each of the possible moves
-            if(board.isValid(i)) { //if the move is valid
-                Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
-                int value = heuristic.evaluateBoard(playerId, newBoard); //evaluate that new board to get a heuristic value from it
-                if(value > maxValue) {
-                    maxMove = i;
-                }
-            }
-        }
-        // This returns the same as:
-        heuristic.getBestAction(playerId, board); // Very useful helper function!
-
-
-        This is obviously not enough (this is depth 1)
-        Your assignment is to create a data structure (tree) to store the gameboards such that you can evaluate a higher depths.
-        Then, use the minmax algorithm to search through this tree to find the best move/action to take!
-        */
-        //my code
         Node node = new Node(board);
         int depth = 6; // looks 6 moves ahead
         // need to figure out exactly what maxmove returns
-        int val = minmax2(depth, board, true)[0]; // this is where i select the player for now
-        System.out.println("best " + val);
+        int best = minmax2(depth, board, true)[0]; // this is where i select the player for now
+        System.out.println("best " + best);
 
-        return val;
+        return best;
     }
 
 /*
+// this is my old function
     public int minmax(Node node, int depth, Board board, boolean maxPlayer) {
 
         Node tree = new Node(board); //this is our database
@@ -116,17 +93,18 @@ public class MinMaxPlayer extends PlayerController {
 
         Node tree = new Node(board); //this is our database
 
+        Board copy = new Board(board);
 
-        int bestMovee = 0;
-        int value = 0;
+        int bestMove = 0;
+        //int value = 0;
 
         if (depth == 0 || board.isTerminal()) {
             //return heuristic.evaluateBoard(playerId, board);
-            return new int[]{heuristic.getBestAction(playerId, board), 0};
+            return new int[]{heuristic.getBestAction(playerId, board), heuristic.evaluateBoard(1,board)};
         }
 
         if (maxPlayer) {
-            int maxValue = -10000;
+            int value = -10000;
             //value = maxValue;
 
             for (int i = 0; i < board.width; i++) { //for each of the possible moves
@@ -134,35 +112,60 @@ public class MinMaxPlayer extends PlayerController {
                     Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
                     Node.addChild(tree, newBoard);
 
-                    value = minmax2(depth - 1, board, true)[1];
-                    if (value > maxValue) {
-                        bestMovee = i; //TODO THIs stays the sameeeeeeeee
+                    int newValue = max(value, minmax2(depth - 1, newBoard, false)[1]);
+
+
+                    if (value < newValue){
+                        bestMove = i;
+                        System.out.println("case1: max" + bestMove);
+
+                        value = newValue;
+                        //System.out.println("xxxx");
                     }
+                    copy = new Board(board);
+
+                    // value = max(value, minimax2(depth-1, newBorad, true))
 
                 }
             }
-            return new int[] {bestMovee,value};
+            return new int[] {bestMove,value};
 
         } else {
-            int minValue = 100000;
-            //value = minValue; //todo
+            int value = 100000;
 
             for (int i = 0; i < board.width; i++) { //for each of the possible moves
-                if (board.isValid(i)) { //if the move is valid
-                    Board newBoard = board.getNewBoard(i, playerId); // Get a new board resulting from that move
-                    value = min(value, minmax2(depth - 1, board, false)[1]);
+                if (copy.isValid(i)) { //if the move is valid
+                    Board newBoard = copy.getNewBoard(i, playerId); // Get a new board resulting from that move
+                    Node.addChild(tree, newBoard);
+                    int newValue = min(value, minmax2(depth - 1, newBoard, true)[1]);
 
-                    if (value < minValue) {
-                        bestMovee = i;
+                    if (value > newValue){
+                        bestMove = i;
+                        System.out.println("case2: min " + bestMove);
+                        value = newValue;
                     }
+
+                    copy = new Board(board);
+
+
                 }
+
             }
-            return new int[] {bestMovee,value};
+            System.out.println("bestMove: " + bestMove);
+            System.out.println("--------------------------------------------------------------------------------");
+            return new int[] {bestMove,value};
         }
 
 
     }
 
+    /**
+     * AB pruning method
+     * @param depth
+     * @param board
+     * @param maxPlayer
+     * @return best move column and value
+     */
     public int abPruning(int depth, Board board, boolean maxPlayer) {
 
         Node tree = new Node(board); //this is our database

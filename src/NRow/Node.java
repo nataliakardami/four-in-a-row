@@ -39,7 +39,7 @@ public class Node {
 //        return new Board(board.getBoardState());
 //    }
 
-    public static boolean isTerminal(Node node){
+    public static boolean isTerminal(Node node){ //TODO
         return node.children == null;
     }
 

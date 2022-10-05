@@ -4,9 +4,7 @@ import NRow.Heuristics.SimpleHeuristic;
 import NRow.Players.HumanPlayer;
 import NRow.Players.MinMaxPlayer;
 import NRow.Players.PlayerController;
-import NRow.Node.*;
 
-import java.util.Arrays;
 
 public class App {
 
@@ -70,6 +68,16 @@ public class App {
         PlayerController human = new HumanPlayer(1, n, heuristic1);
         PlayerController minmax = new MinMaxPlayer(2, n,4,heuristic1);
 
+        PlayerController[] players = { human, minmax };
+
+        return players;
+    }
+
+    private static PlayerController[] getAbPlayer(int n){
+        SimpleHeuristic heuristic = new SimpleHeuristic(n);
+
+        PlayerController human = new HumanPlayer(1, n, heuristic);
+        PlayerController minmax = new MinMaxPlayer(2, n,4,heuristic);
         PlayerController[] players = { human, minmax };
 
         return players;

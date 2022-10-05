@@ -2,6 +2,8 @@ package NRow;
 
 import java.util.Arrays;
 
+import static NRow.Game.winning;
+
 public class Board {
   public final int width;
   public final int height;
@@ -131,8 +133,10 @@ public class Board {
     
     return output;
   }
+
+
   public boolean isTerminal(){
-    //TODO
-    return false;
+    int terminal = winning(this.boardState,1);
+    return terminal!=0;
   }
 }
